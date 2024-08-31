@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/consts/consts.dart';
 import 'package:flutter_ecommerce/consts/lists.dart';
+import 'package:flutter_ecommerce/controllers/auth_controller.dart';
 import 'package:flutter_ecommerce/views/auth_screen/signup_screen.dart';
 import 'package:flutter_ecommerce/views/home_screen/home.dart';
 import 'package:flutter_ecommerce/widgets_common/applogo_widget.dart';
@@ -14,6 +15,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(AuthController());
     return bgWidget(
         child: Scaffold(
       resizeToAvoidBottomInset: false,
@@ -27,8 +29,16 @@ class LoginScreen extends StatelessWidget {
             10.heightBox,
             Column(
               children: [
-                customTextField(hint: emailHint, title: email),
-                customTextField(hint: passwordHint, title: password),
+                customTextField(
+                    hint: emailHint,
+                    title: email,
+                    isPassword: false,
+                    controller: controller.emailController),
+                customTextField(
+                    hint: passwordHint,
+                    title: password,
+                    isPassword: false,
+                    controller: controller.passwordController),
                 Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -38,8 +48,15 @@ class LoginScreen extends StatelessWidget {
                     color: redColor,
                     title: login,
                     textColor: whiteColor,
-                    onPress: () {
-                      Get.to(Home());
+                    onPress: () async {
+                      await controller
+                          .loginMethod(context: context)
+                          .then((value) {
+                        if (value != Null) {
+                          Get.offAll(() => const Home());
+                          VxToast.show(context, msg: loggedin);
+                        }
+                      });
                     }).box.width(context.screenWidth - 50).make(),
                 5.heightBox,
                 createNewAccount.text.color(fontGrey).make(),
