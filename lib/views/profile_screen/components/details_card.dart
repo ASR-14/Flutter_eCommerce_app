@@ -14,7 +14,7 @@ Widget detailsCard({width, String? count, String? title}) {
       .rounded
       .width(width)
       .height(80)
-      .padding(EdgeInsets.all(4))
+      .padding(const EdgeInsets.all(4))
       .shadowSm
       .make();
 }
