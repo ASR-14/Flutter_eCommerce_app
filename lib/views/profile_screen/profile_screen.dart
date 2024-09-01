@@ -45,17 +45,28 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ).onTap(() {
                       // print(snapshot.data?.docs);
-                      Get.to(() => const EditProfileScreen());
+
+                      controller.nameController.text = data['name'];
+                      controller.passController.text = data['password'];
+                      Get.to(() => EditProfileScreen(data: data));
                     }),
                   ),
                   //user detail
                   Row(
                     children: [
-                      Image.asset(imgProfile2, width: 100, fit: BoxFit.cover)
-                          .box
-                          .roundedFull
-                          .clip(Clip.antiAlias)
-                          .make(),
+                      data['imageUrl'] == ""
+                          ? Image.asset(imgProfile2,
+                                  width: 100, fit: BoxFit.cover)
+                              .box
+                              .roundedFull
+                              .clip(Clip.antiAlias)
+                              .make()
+                          : Image.network(data['imageUrl'],
+                                  width: 100, fit: BoxFit.cover)
+                              .box
+                              .roundedFull
+                              .clip(Clip.antiAlias)
+                              .make(),
                       10.widthBox,
                       Expanded(
                           child: Column(
@@ -85,15 +96,15 @@ class ProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       detailsCard(
-                          count: "00",
+                          count: "${data['cart_count']}",
                           title: "in your cart",
                           width: context.screenWidth / 3.4),
                       detailsCard(
-                          count: "32",
+                          count: "${data['wishlist_count']}",
                           title: "in your wishlist",
                           width: context.screenWidth / 3.4),
                       detailsCard(
-                          count: "675",
+                          count: "${data['order_count']}",
                           title: "your orders",
                           width: context.screenWidth / 3.4),
                     ],
