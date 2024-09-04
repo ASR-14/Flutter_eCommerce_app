@@ -13,7 +13,7 @@ const featuredTitle1 = [womenDress, girlsWatches, girlsWatches];
 const featuredTitle2 = [boysGlasses, mobilePhone, mobilePhone];
 
 const categoriesList = [
-  womenDress,
+  womenClothing,
   menClothingFashion,
   compAccess,
   automobile,

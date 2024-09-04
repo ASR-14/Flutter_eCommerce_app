@@ -19,7 +19,6 @@ const alreadyHaveAccount = "Already have an account? ";
 const loggedin = "Logged in Successfully";
 const loggedout = "Logged out Successfully";
 
-
 const home = "Home",
     categories = "Categories",
     cart = "Cart",
@@ -42,7 +41,7 @@ const searchanything = "Search anything...",
 
 // category strings
 
-const womenClothing = "Women Clothing",
+const womenClothing = "Women Dress",
     menClothingFashion = "Men Clothing & Fashion",
     compAccess = "Computer & Accessories",
     automobile = "Automobile",
@@ -61,4 +60,8 @@ const video = "Video",
     productsyoumaylike = "Products you may also like";
 
 //profile strings
-const wishlist = "My Wishlist", orders = "My Orders", message = "Messages";
+const wishlist = "My Wishlist",
+    orders = "My Orders",
+    message = "Messages",
+    oldpass = "Old Password",
+    newpass = "New Password";
