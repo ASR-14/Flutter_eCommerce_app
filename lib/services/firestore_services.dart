@@ -7,4 +7,11 @@ class FirestoreServices {
         .where('id', isEqualTo: uid)
         .snapshots();
   }
+
+  static getProducts(category) {
+    return firestore
+        .collection(productsCollection)
+        .where('p_category', isEqualTo: category)
+        .snapshots();
+  }
 }
