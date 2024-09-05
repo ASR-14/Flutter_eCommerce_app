@@ -17,11 +17,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   changeScreen() {
     Future.delayed(const Duration(seconds: 3), () {
-      // Get.to(() => const LoginScreen()); 
+      // Get.to(() => const LoginScreen());
 
       auth.authStateChanges().listen(
         (User? user) {
-          if (user == null && mounted) {
+          if (user == null) {
             Get.to(() => const LoginScreen());
           } else {
             Get.to(() => const Home());
