@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/consts/consts.dart';
 import 'package:flutter_ecommerce/controllers/cart_controller.dart';
 import 'package:flutter_ecommerce/services/firestore_services.dart';
+import 'package:flutter_ecommerce/views/cart_screen/shipping_screen.dart';
 import 'package:flutter_ecommerce/widgets_common/loading_indicator.dart';
 import 'package:flutter_ecommerce/widgets_common/our_button.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,17 @@ class CartScreen extends StatelessWidget {
     var controller = Get.put(CartController());
 
     return Scaffold(
+      bottomNavigationBar: SizedBox(
+        height: 60,
+        width: context.screenWidth - 60,
+        child: ourButton(
+            color: redColor,
+            onPress: () {
+              Get.to(() => const ShippingDetails());
+            },
+            textColor: whiteColor,
+            title: "Proceed to shipping"),
+      ),
       backgroundColor: whiteColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -39,6 +51,7 @@ class CartScreen extends StatelessWidget {
             var data = snapshot.data!.docs;
 
             controller.calculate(data);
+            controller.productSnapshot = data;
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -49,7 +62,11 @@ class CartScreen extends StatelessWidget {
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        leading: Image.network("${data[index]['img']}"),
+                        leading: Image.network(
+                          "${data[index]['img']}",
+                          width: 80,
+                          fit: BoxFit.cover,
+                        ),
                         title:
                             "${data[index]['title']}   (x${data[index]['qty']}) "
                                 .text
@@ -96,14 +113,14 @@ class CartScreen extends StatelessWidget {
                       .roundedSM
                       .make(),
                   10.heightBox,
-                  SizedBox(
-                    width: context.screenWidth - 60,
-                    child: ourButton(
-                        color: redColor,
-                        onPress: () {},
-                        textColor: whiteColor,
-                        title: "Proceed to shipping"),
-                  )
+                  // SizedBox(
+                  //   width: context.screenWidth - 60,
+                  //   child: ourButton(
+                  //       color: redColor,
+                  //       onPress: () {},
+                  //       textColor: whiteColor,
+                  //       title: "Proceed to shipping"),
+                  // )
                 ],
               ),
             );

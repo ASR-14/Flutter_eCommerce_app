@@ -46,3 +46,6 @@ const itemDetailButtonList = [
 
 const profileButtonList = [orders, wishlist, message];
 const profileButtonsIcon = [icOrder, icOrder, icMessages];
+
+const paymentMethodsImg = [imgPaypal, imgStripe, imgCod];
+const paymentMethods = [paypal, stripe, cod];
