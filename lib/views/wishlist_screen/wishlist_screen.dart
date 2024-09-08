@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/consts/consts.dart';
 import 'package:flutter_ecommerce/services/firestore_services.dart';
+import 'package:flutter_ecommerce/views/orders_screen/orders_details.dart';
 import 'package:flutter_ecommerce/widgets_common/loading_indicator.dart';
+import 'package:get/get.dart';
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
@@ -25,7 +27,45 @@ class WishlistScreen extends StatelessWidget {
           } else if (snapshot.data!.docs.isEmpty) {
             return "No orders yet !".text.color(darkFontGrey).makeCentered();
           } else {
-            return Container();
+            var data = snapshot.data!.docs;
+            return Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Image.network(
+                      "${data[index]['p_imgs'][0]}",
+                      width: 80,
+                      fit: BoxFit.cover,
+                    ),
+                    title: "${data[index]['p_name']}"
+                        .text
+                        .fontFamily(semibold)
+                        .size(16)
+                        .make(),
+                    subtitle: "${data[index]['p_price']}"
+                        .numCurrency
+                        .text
+                        .color(redColor)
+                        .fontFamily(semibold)
+                        .make(),
+                    trailing: const Icon(
+                      Icons.favorite,
+                      color: redColor,
+                    ).onTap(() async {
+                      // FirestoreServices.deleteCart(data[index].id);
+                      await firestore
+                          .collection(productsCollection)
+                          .doc(data[index].id)
+                          .set({
+                        'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
+                      }, SetOptions(merge: true));
+                    }),
+                  );
+                },
+              ),
+            );
           }
         },
       ),

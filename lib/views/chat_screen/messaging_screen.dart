@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/consts/consts.dart';
 import 'package:flutter_ecommerce/services/firestore_services.dart';
+import 'package:flutter_ecommerce/views/chat_screen/chat_screen.dart';
 import 'package:flutter_ecommerce/widgets_common/loading_indicator.dart';
+import 'package:get/get.dart';
 
 class MessagingScreen extends StatelessWidget {
   const MessagingScreen({super.key});
@@ -25,7 +27,43 @@ class MessagingScreen extends StatelessWidget {
           } else if (snapshot.data!.docs.isEmpty) {
             return "No messages yet !".text.color(darkFontGrey).makeCentered();
           } else {
-            return Container();
+            var data = snapshot.data!.docs;
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Expanded(
+                      child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          onTap: () {
+                            Get.to(() => const ChatScreen(), arguments: [
+                              data[index]['frient_name'],
+                              data[index]['toId']
+                            ]);
+                          },
+                          leading: const CircleAvatar(
+                            backgroundColor: redColor,
+                            child: Icon(
+                              Icons.person,
+                              color: whiteColor,
+                            ),
+                          ),
+                          title: "${data[index]['frient_name']}"
+                              .text
+                              .fontFamily(semibold)
+                              .color(darkFontGrey)
+                              .make(),
+                          subtitle: "${data[index]['last_msg']}".text.make(),
+                        ),
+                      );
+                    },
+                  ))
+                ],
+              ),
+            );
           }
         },
       ),

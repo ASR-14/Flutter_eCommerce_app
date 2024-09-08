@@ -12,6 +12,10 @@ class HomeController extends GetxController {
 
   var username = "";
 
+  var featuredList = [];
+
+  var searchController = TextEditingController();
+
   getUsername() async {
     var n = await firestore
         .collection(userCollection)
@@ -25,6 +29,5 @@ class HomeController extends GetxController {
       },
     );
     username = n;
-    print(username);
   }
 }
