@@ -8,28 +8,74 @@ import 'package:flutter_ecommerce/widgets_common/bg_widget.dart';
 import 'package:flutter_ecommerce/widgets_common/loading_indicator.dart';
 import 'package:get/get.dart';
 
-class CategoryDetails extends StatelessWidget {
+class CategoryDetails extends StatefulWidget {
   final String? title;
   const CategoryDetails({super.key, required this.title});
 
   @override
+  State<CategoryDetails> createState() => _CategoryDetailsState();
+}
+
+class _CategoryDetailsState extends State<CategoryDetails> {
+  var controller = Get.find<ProductController>();
+
+  dynamic productMethod;
+
+  @override
+  void initState() {
+    switchCategory(widget.title);
+    super.initState();
+  }
+
+  switchCategory(title) {
+    if (controller.subcat.contains(title)) {
+      productMethod = FirestoreServices.getSubcategoryProducts(title);
+    } else {
+      productMethod = FirestoreServices.getProducts(title);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ProductController>();
     return bgWidget(
         child: Scaffold(
       appBar: AppBar(
-        title: title!.text.fontFamily(bold).white.make(),
+        title: widget.title!.text.fontFamily(bold).white.make(),
       ),
       body: StreamBuilder(
-        stream: FirestoreServices.getProducts(title),
+        stream: productMethod,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
               child: loadingIndicator(),
             );
           } else if (snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: "No products found!".text.color(darkFontGrey).make(),
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: List.generate(
+                      controller.subcat.length,
+                      (index) => "${controller.subcat[index]}"
+                              .text
+                              .size(12)
+                              .fontFamily(semibold)
+                              .color(darkFontGrey)
+                              .makeCentered()
+                              .box
+                              .white
+                              .rounded
+                              .size(120, 60)
+                              .margin(const EdgeInsets.symmetric(horizontal: 4))
+                              .make()
+                              .onTap(() {
+                            switchCategory(controller.subcat[index].toString());
+                            setState(() {});
+                          })),
+                ),
+              ),
             );
           } else {
             var data = snapshot.data!.docs;
@@ -46,17 +92,23 @@ class CategoryDetails extends StatelessWidget {
                       children: List.generate(
                           controller.subcat.length,
                           (index) => "${controller.subcat[index]}"
-                              .text
-                              .size(12)
-                              .fontFamily(semibold)
-                              .color(darkFontGrey)
-                              .makeCentered()
-                              .box
-                              .white
-                              .rounded
-                              .size(120, 60)
-                              .margin(const EdgeInsets.symmetric(horizontal: 4))
-                              .make()),
+                                  .text
+                                  .size(12)
+                                  .fontFamily(semibold)
+                                  .color(darkFontGrey)
+                                  .makeCentered()
+                                  .box
+                                  .white
+                                  .rounded
+                                  .size(120, 60)
+                                  .margin(
+                                      const EdgeInsets.symmetric(horizontal: 4))
+                                  .make()
+                                  .onTap(() {
+                                switchCategory(
+                                    controller.subcat[index].toString());
+                                setState(() {});
+                              })),
                     ),
                   ),
                   20.heightBox,
